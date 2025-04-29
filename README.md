@@ -50,6 +50,45 @@ Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan un
       - Mengupdate prediksi dengan menambahkan kontribusi dari pohon baru.
       - Mengulangi proses hingga mencapai jumlah iterasi maksimum atau konvergensi.
 
+      Adapun Kelebihan dari Algoritma XGBoost yaitu :
+      - Sangat Cepat dan Efisien
+      - Skalabilitas Tinggi
+      - Regularisasi Terintegrasi
+      - Mendukung Data Sparse
+      - Approximate Learning (Quantile Sketch)
+
+      Adapun Kekurangan dari Algoritma XGBoost yaitu :
+      - Kompleksitas Tuning Hyperparameter
+      - Butuh Sumber Daya untuk Dataset Sangat Besar
+      - Kurang Efisien untuk Data Kecil Sederhana
+    - Algoritma Support Vector Regressor
+
+      Support Vector Regression (SVR) adalah algoritma regresi berbasis prinsip Support Vector Machines (SVM) yang bertujuan untuk menemukan fungsi $f(x)$ yang menyimpang maksimal sebesar $\varepsilon$ dari nilai aktual target $y_i$, sekaligus menjaga fungsi tetap sesederhana mungkin. SVR berupaya meminimalkan kompleksitas model dengan menjaga vektor bobot $w$ tetap kecil, menggunakan konsep $ε$-insensitive loss function. Artinya, prediksi yang meleset kurang dari $\varepsilon$ diabaikan, sementara deviasi lebih besar dari $\varepsilon$ dihukum secara proporsional. Pendekatan ini sangat sesuai untuk aplikasi prediksi harga saham seperti Bank BCA (BBCA), di mana toleransi terhadap deviasi kecil penting dalam memperhalus model terhadap fluktuasi minor pasar.
+
+      Secara matematis, SVR memformulasikan masalah optimasi sebagai berikut:
+
+      $\text{minimize} \quad \frac{1}{2} \lVert w \rVert^2 + C \sum_{i=1}^{\ell} (\xi_i + \xi_i^*)$
+
+      dengan kendala :
+
+      $y_i - \langle w, x_i \rangle - b \leq \varepsilon + \xi_i$
+
+      $\langle w, x_i \rangle + b - y_i \leq \varepsilon + \xi_i^*$
+
+      $\xi_i, \xi_i^* \geq 0$
+
+      di mana C adalah parameter trade-off antara kompleksitas model dan toleransi error ￼. Solusi optimal w dan b diperoleh melalui teknik optimasi dual menggunakan kernel k(x, x{\prime}), sehingga dalam prediksi non-linear, fungsi regresi diekspresikan sebagai:
+$f(x) = \sum_{i=1}^{\ell} (\alpha_i - \alpha_i^*) k(x_i, x) + b.$
+
+      Penggunaan kernel seperti Radial Basis Function (RBF) memungkinkan SVR menangkap hubungan non-linear antara variabel-variabel fundamental atau teknikal saham BBCA. Dengan pendekatan ini, SVR dapat membangun model prediktif yang robust, efisien, dan adaptif terhadap dinamika pasar saham Indonesia.
+
+   - Algoritma Long Short-Term Memory
+
+     
+
+      
+      
+
 ## Referensi
 [1] Yahoo Finance, BBCA Historical Data, diakses dari https://finance.yahoo.com/quote/BBCA.JK/history
 
