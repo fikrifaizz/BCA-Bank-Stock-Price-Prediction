@@ -22,9 +22,33 @@ Berdasarkan rumusan masalah yang telah dipaparkan di atas, maka didapatkan tujua
 ### Solution Statements
 Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan untuk dapat mencapai tujuan dari proyek ini, yaitu:
 1. Tahap persiapan data (data preparation) dapat dilakukan dengan beberapa teknik, sebagai berikut:
-    - Melakukan pembagian data menjadi 2, yaitu data latih (training data) dan data uji (testing data) dengan perbandingan rasio sebesar 90 : 10 yang akan digunakan ketika membangun model machine learning.
+    - Melakukan pembagian data menjadi 2, yaitu data latih (training data) dan data uji (testing data) dengan perbandingan rasio sebesar 80 : 20 yang akan digunakan ketika membangun model machine learning/deep learning.
     - Melakukan standarisasi nilai pada data fitur numerik untuk mencegah terjadinya penyimpangan nilai data yang cukup besar.
-2. Tahap pembuatan model machine learning akan digunakan 3 model dengan algoritma machine learning yang berbeda. Algoritma yang akan digunakan adalah K-Nearest Neighbor Algorithm, Random Forest Algorithm, dan Adaptive Boosting Algorithm. Dari ketiga model tersebut akan dilakukan evaluasi performa dan kinerja masing-masing algoritma dan akan dipilih satu algoritma yang memberikan hasil prediksi yang terbaik.
+2. Tahap pembuatan model machine learning dan deep learning akan digunakan 3 model dengan 2 algoritma machine learning yang berbeda dan 1 algoritma deep learning. Algoritma yang akan digunakan adalah XGBoost Regressor, Support Vector Regressor, dan Long Short-Term Memory Algorithm. Dari ketiga model tersebut akan dilakukan evaluasi performa dan kinerja masing-masing algoritma dan akan dipilih satu algoritma yang memberikan hasil prediksi yang terbaik.
+    - Algoritma XGBoost
+
+      XGBoost (Extreme Gradient Boosting) adalah algoritma ensemble learning berbasis gradient boosting yang dirancang untuk membangun model prediksi dengan akurasi tinggi dan skalabilitas luar biasa. XGBoost memperbaiki pendekatan gradient boosting tradisional melalui optimasi sistematis pada penggunaan memori, pengolahan data sparsity, regularisasi model, dan parallelisasi proses pembelajaran. Secara matematis, XGBoost bertujuan meminimalkan fungsi objektif gabungan antara fungsi loss (mengukur kesalahan prediksi) dan fungsi regularisasi (mengendalikan kompleksitas model), sehingga tidak hanya fokus pada fitting data tetapi juga menghindari overfitting.
+
+      Model prediksi dibangun secara aditif, di mana pada setiap iterasi $t$, model baru $f_t(x)$ ditambahkan untuk mengurangi error dari prediksi sebelumnya. Fungsi objektif pada iterasi ke- $t$ dirumuskan sebagai:
+      
+      $\mathcal{L}^{(t)} = \sum_{i=1}^{n} l(y_i, \hat{y}_i^{(t-1)} + f_t(\mathbf{x}_i)) + \Omega(f_t)$
+
+      dengan $\Omega(f) = \gamma T + \frac{1}{2} \lambda \|w\|^2$ di mana $T$ adalah jumlah daun dalam pohon, $w_j$ adalah bobot nilai di daun ke- $j$, dan $\gamma$, $\lambda$ adalah parameter regularisasi.
+
+      Untuk efisiensi, fungsi loss didekati menggunakan Taylor expansion orde dua:
+
+      $\tilde{\mathcal{L}}^{(t)} = \sum_{i=1}^{n} \left[ g_i f_t(\mathbf{x}_i) + \frac{1}{2} h_i f_t^2(\mathbf{x}_i) \right] + \Omega(f_t)$
+
+      dengan $g_i$ dan $h_i$ berturut-turut sebagai gradien pertama dan kedua dari fungsi loss terhadap prediksi sebelumnya.
+
+      Cara kerja XGBoost meliputi:
+
+      - Menghitung gradien dan hessian untuk semua data.
+      - Membangun pohon keputusan baru dengan memilih split yang memaksimalkan gain:
+
+        $Gain = \frac{1}{2} \left[ \frac{\left( \sum_{i \in I_L} g_i \right)^2}{\sum_{i \in I_L} h_i + \lambda} + \frac{\left( \sum_{i \in I_R} g_i \right)^2}{\sum_{i \in I_R} h_i + \lambda} - \frac{\left( \sum_{i \in I} g_i \right)^2}{\sum_{i \in I} h_i + \lambda} \right] - \gamma$
+      - Mengupdate prediksi dengan menambahkan kontribusi dari pohon baru.
+      - Mengulangi proses hingga mencapai jumlah iterasi maksimum atau konvergensi.
 
 ## Referensi
 [1] Yahoo Finance, BBCA Historical Data, diakses dari https://finance.yahoo.com/quote/BBCA.JK/history
