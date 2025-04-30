@@ -33,7 +33,7 @@ Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan un
       
       $\mathcal{L}^{(t)} = \sum_{i=1}^{n} l(y_i, \hat{y}_i^{(t-1)} + f_t(\mathbf{x}_i)) + \Omega(f_t)$
 
-      dengan $\Omega(f) = \gamma T + \frac{1}{2} \lambda \|w\|^2$ di mana $T$ adalah jumlah daun dalam pohon, $w_j$ adalah bobot nilai di daun ke- $j$, dan $\gamma$, $\lambda$ adalah parameter regularisasi.
+      dengan $\Omega(f) = \gamma T + \frac{1}{2} \lambda \lVert w \rVert^2$ di mana $T$ adalah jumlah daun dalam pohon, $w_j$ adalah bobot nilai di daun ke- $j$, dan $\gamma$, $\lambda$ adalah parameter regularisasi.
 
       Untuk efisiensi, fungsi loss didekati menggunakan Taylor expansion orde dua:
 
@@ -84,7 +84,10 @@ $f(x) = \sum_{i=1}^{\ell} (\alpha_i - \alpha_i^*) k(x_i, x) + b.$
 
    - Algoritma Long Short-Term Memory
 
-     
+     Long Short-Term Memory (LSTM) adalah arsitektur jaringan saraf berulang (RNN) yang dirancang untuk mengatasi masalah vanishing dan exploding gradient dalam pembelajaran sekuensial jangka panjang. Berbeda dengan RNN konvensional, LSTM memperkenalkan struktur memori internal yang disebut cell state yang mampu mempertahankan informasi sepanjang waktu melalui jalur gradien konstan (constant error carousel). Struktur ini dikendalikan oleh tiga unit gerbang utama — input gate, forget gate, dan output gate — yang secara selektif mengizinkan informasi masuk, disimpan, atau dikeluarkan dari cell state. Dengan kemampuannya mempertahankan informasi relevan dan melupakan informasi tidak relevan, LSTM sangat cocok untuk aplikasi prediksi harga saham seperti Bank BCA (BBCA), di mana pola historis harga dan tren jangka panjang memainkan peran krusial dalam membuat estimasi harga di masa depan.
+
+     Secara matematis, pada setiap waktu t, mekanisme internal LSTM dijelaskan melalui persamaan sebagai berikut:
+     - 
 
       
       
