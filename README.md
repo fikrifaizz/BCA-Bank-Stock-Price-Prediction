@@ -141,9 +141,25 @@ $f(x) = \sum_{i=1}^{\ell} (\alpha_i - \alpha_i^*) k(x_i, x) + b.$
 <img src="https://github.com/user-attachments/assets/50b06b86-ce51-438e-a5e4-011d8b1012a6" alt="Profil Bank BCA" title="Profil Bank BCA">
 
 Data yang digunakan dalam proyek ini adalah data yang diambil dari Bursa Efek Indonesia mulai dari tahun 2021 hingga 2025. Dari data tersebut, masih perlu dilakukan penyesuaian hingga dataset dapat benar-benar digunakan, yaitu:
-- s
-- 
+- Mengubah format atau tipe data pada kolom Tanggal dari object menjadi datetime64[ns]:
+  ```python
+  data['Tanggal'] = pd.to_datetime(data['Tanggal'])
+  ```
+- Karena tujuan dari penelitian ini adalah untuk memprediksi harga saham 1 hari kedepan maka dilakukan pengurutan berdasarkan tanggal dari terlama hingga terbaru
+  ```python
+  data = data.sort_values('Tanggal')
+  ```
+Kemudian dilakukan proses Exploratory Data Analysis (EDA) sebagai investigasi awal untuk menganalisis karakteristik, menemukan pola, anomali, dan memeriksa asumsi pada data dengan menggunakan teknik statistik dan representasi grafis atau visualisasi.
+1. Deskripsi Variabel
 
+   Berikut adalah informasi mengenai variabel-variabel yang terdapat pada dataset Harga Saham Bank BCA adalah sebagai berikut
+
+   <img src="https://github.com/user-attachments/assets/17d235e8-7dc3-4050-b9bc-ca85cea1c434" alt="Deskripsi Variabel" title="Deskripsi Variabel" width="100" height="110">
+   
+3. 1
+4. f
+5. a
+6. 
 
 
      
