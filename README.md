@@ -84,12 +84,63 @@ $f(x) = \sum_{i=1}^{\ell} (\alpha_i - \alpha_i^*) k(x_i, x) + b.$
 
    - Algoritma Long Short-Term Memory
 
-     Long Short-Term Memory (LSTM) adalah arsitektur jaringan saraf berulang (RNN) yang dirancang untuk mengatasi masalah vanishing dan exploding gradient dalam pembelajaran sekuensial jangka panjang. Berbeda dengan RNN konvensional, LSTM memperkenalkan struktur memori internal yang disebut cell state yang mampu mempertahankan informasi sepanjang waktu melalui jalur gradien konstan (constant error carousel). Struktur ini dikendalikan oleh tiga unit gerbang utama — input gate, forget gate, dan output gate — yang secara selektif mengizinkan informasi masuk, disimpan, atau dikeluarkan dari cell state. Dengan kemampuannya mempertahankan informasi relevan dan melupakan informasi tidak relevan, LSTM sangat cocok untuk aplikasi prediksi harga saham seperti Bank BCA (BBCA), di mana pola historis harga dan tren jangka panjang memainkan peran krusial dalam membuat estimasi harga di masa depan.
+     Long Short-Term Memory (LSTM) adalah salah satu jenis jaringan saraf tiruan yang dikembangkan oleh Sepp Hochreiter dan Jürgen Schmidhuber pada tahun 1997. Arsitektur ini dirancang untuk mengatasi kelemahan utama pada Recurrent Neural Network (RNN), yaitu hilangnya gradien (vanishing gradient) ketika memproses data sekuensial dalam jangka panjang. LSTM sangat sesuai digunakan untuk data deret waktu (time series), termasuk dalam prediksi harga saham, karena kemampuannya dalam menyimpan dan mengelola informasi historis dalam periode waktu yang panjang.
 
-     Secara matematis, pada setiap waktu t, mekanisme internal LSTM dijelaskan melalui persamaan sebagai berikut:
-     - 
+     Sebelum membahas alur kerja LSTM secara detail, berikut adalah fungsi-fungsi aktivasi utama yang digunakan dalam proses perhitungan:
 
-      
+     a. Fungsi Aktivasi
+  
+        - Fungsi Sigmoid : digunakan pada unit gerbang (gate), menghasilkan output dalam rentang [0, 1]:
+  
+             $f(x) = \frac{1}{1 + \exp(-x)}$
+            
+        - Fungsi aktivasi output: digunakan untuk transformasi nilai cell state menjadi output unit:
+  
+          $h(x) = \frac{2}{1 + \exp(-x)} - 1$
+        - Fungsi kandidat memori: digunakan dalam proses pembentukan kandidat nilai yang akan disimpan di memori:
+          $g(x) = \frac{4}{1 + \exp(-x)} - 2$
+          
+     b. Input Gate
+  
+     Input gate menentukan seberapa besar informasi baru $x_t$ akan ditambahkan ke memori internal pada waktu $t$. Aktivasi gerbang input dihitung berdasarkan sinyal dari waktu sebelumnya $y_u(t - 1)$:
+  
+     $net_{inj}(t) = \sum_u w_{inj,u} \cdot y_u(t - 1)$
+  
+     $y_{inj}(t) = f_{inj}(net_{inj}(t))$
+    
+     c. Output Gate
+
+     Output gate mengontrol seberapa besar informasi dari memori internal dikeluarkan sebagai output pada waktu $t$:
+  
+     $net_{outj}(t) = \sum_u w_{outj,u} \cdot y_u(t - 1)$
+  
+     $y_{outj}(t) = f_{outj}(net_{outj}(t))$
+
+     d. Memory Cell (State dan Output)
+  
+     Memory cell menyimpan informasi historis dalam bentuk internal state. Proses pembaruan memori cell terdiri dari dua bagian: perhitungan nilai kandidat memori, dan pembaruan internal state.
+     
+     - Kandidat memori dan pembaruan state:
+
+       $net_{cj}(t) = \sum_u w_{cj,u} \cdot y_u(t - 1)$
+       
+       $s_{cj}(0) = 0, \quad s_{cj}(t) = s_{cj}(t - 1) + y_{inj}(t) \cdot g(net_{cj}(t))$
+     - Output dari cell
+
+       $y_{cj}(t) = y_{outj}(t) \cdot h(s_{cj}(t))$
+     
+     e. Output Layer
+
+     Output akhir dari jaringan (misalnya prediksi harga) diperoleh dari aktivasi unit output yang menggabungkan sinyal dari cell-cell memori:
+
+     $net_k(t) = \sum_{u: u \text{ not a gate}} w_{k,u} \cdot y_u(t - 1)$
+
+     $y_k(t) = f_k(net_k(t))$
+
+### Data Understanding
+
+
+     
       
 
 ## Referensi
