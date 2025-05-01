@@ -138,6 +138,12 @@ $f(x) = \sum_{i=1}^{\ell} (\alpha_i - \alpha_i^*) k(x_i, x) + b.$
      $y_k(t) = f_k(net_k(t))$
 
 ### Data Understanding
+<img src="https://github.com/user-attachments/assets/50b06b86-ce51-438e-a5e4-011d8b1012a6" alt="Profil Bank BCA" title="Profil Bank BCA">
+
+Data yang digunakan dalam proyek ini adalah data yang diambil dari Bursa Efek Indonesia mulai dari tahun 2021 hingga 2025. Dari data tersebut, masih perlu dilakukan penyesuaian hingga dataset dapat benar-benar digunakan, yaitu:
+- s
+- 
+
 
 
      
