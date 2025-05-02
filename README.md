@@ -283,7 +283,35 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
          return ds.batch(batch_size).prefetch(1)
      ```
 
+### Modelling
 
+Setelah dilakukannya tahap data preparation, selanjutnya adalah melakukan tahap persiapan model terlebih dahulu sebelum mengembangkan model menggunakan algoritma yang telah ditentukan. Tahap persiapan dataframe untuk analisis model menggunakan parameter index, yaitu train_mse dan test_mse, serta parameter columns yang merupakan algoritma yang akan digunakan untuk melakukan prediksi, yaitu algoritma XGBoost, Support Vector Regression (SVR), dan Long Short-Term Memory (LSTM).
+
+```python
+models = pd.DataFrame(index=['train_mse', 'test_mse'],
+                      columns=['XGBoost', 'SVR', 'LSTM'])
+```
+
+Kemudian terapkan ketiga algoritma ke dalam model tersebut.
+1. XGBoost
+
+   Pada algoritma XGBoost, semua parameter yang digunakan merupakan nilai default dari Pustaka `xgboost`.
+
+   ```python
+    XGBoost = xgb.XGBRegressor()
+   ```
+
+   Kemudian akan dilakukan analisis prediksi error menggunakan Mean Squared Error (MSE) pada data latih (training data) dan data uji (testing data)
+
+   ```python
+   XGBoost.fit(X_train_seq, y_train_seq)
+   models.loc['train_mse','XGBoost'] = mean_squared_error(y_pred = XGBoost.predict(X_train_seq), y_true=y_train_seq)
+   models.loc['test_mse','XGBoost'] = mean_squared_error(y_pred = XGBoost.predict(X_test_seq), y_true=y_test_seq)
+   ```
+
+2. Support Vector Regression
+
+   Pada algoritma XGBoost, semua parameter yang digunakan merupakan nilai default dari Pustaka `xgboost`.
 
 
 
