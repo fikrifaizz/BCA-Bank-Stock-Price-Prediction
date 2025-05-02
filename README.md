@@ -247,6 +247,45 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
 
    `-1` berarti ukuran dimensi pertama disesuaikan otomatis, `1` menandakan satu fitur/kolom.
 
+3. Normalisasi pada Fitur Numerik
+
+   Min Max Normalisasi adalah penskalaan ulang data dari rentang asli sehingga semua nilai berada dalam rentang baru 0 dan 1. Penskalaan fitur agar terletak di antara nilai minimum dan maksimum, biasanya antara nol dan satu, atau menskalakan nilai absolut maksimum setiap fitur ke ukuran satuan. Motivasi untuk menggunakan MinMaxScaler adalah untuk mencakup ketahanan terhadap standar deviasi fitur yang sangat kecil.
+
+   ```python
+   scaler = MinMaxScaler()
+   xtrain = scaler.fit_transform(train)
+   xtest = scaler.transform(test)
+   ```
+
+4. Windowing Data
+
+   Mengubah data time series menjadi urutan untuk prediksi berbasis jendela waktu (windowing). Pada dasarnya, cell ini adalah "mesin penerjemah" data time series menjadi potongan-potongan informasi yang bermakna bagi model machine learning. Proses ini memungkinkan model "belajar" bagaimana harga bergerak berdasarkan sejarah sebelumnya, seperti seorang analis yang mempelajari tren masa lalu untuk memprediksi masa depan. Intinya, windowing adalah "mesin waktu" yang mengubah data mentah menjadi cerita berurutan yang dapat dipahami oleh model machine learning/deep learning.
+
+   - Windowing Machine learning
+
+     ```python
+        def create_sequences(data, window_size):
+        X, y = [], []
+        for i in range(len(data) - window_size):
+            X.append(data[i:i+window_size])
+            y.append(data[i+window_size])
+        return np.array(X), np.array(y)
+     ```
+   - Windowing Deep Learning
+
+     ```python
+        def windowed_dataset(series, window_size, batch_size, shuffle_buffer):
+            ds = tf.data.Dataset.from_tensor_slices(series)
+            ds = ds.window(window_size + 1, shift=1, drop_remainder=True)
+            ds = ds.flat_map(lambda w: w.batch(window_size + 1))
+            ds = ds.shuffle(shuffle_buffer)
+            ds = ds.map(lambda w: (w[:-1], w[1:]))
+         return ds.batch(batch_size).prefetch(1)
+     ```
+
+
+
+
 
       
 
