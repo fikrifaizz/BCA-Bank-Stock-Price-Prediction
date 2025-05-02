@@ -27,9 +27,9 @@ Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan un
 2. Tahap pembuatan model machine learning dan deep learning akan digunakan 3 model dengan 2 algoritma machine learning yang berbeda dan 1 algoritma deep learning. Algoritma yang akan digunakan adalah XGBoost Regressor, Support Vector Regressor, dan Long Short-Term Memory Algorithm. Dari ketiga model tersebut akan dilakukan evaluasi performa dan kinerja masing-masing algoritma dan akan dipilih satu algoritma yang memberikan hasil prediksi yang terbaik.
     - Algoritma XGBoost
 
-      XGBoost (Extreme Gradient Boosting) adalah algoritma ensemble learning berbasis gradient boosting yang dirancang untuk membangun model prediksi dengan akurasi tinggi dan skalabilitas luar biasa. XGBoost memperbaiki pendekatan gradient boosting tradisional melalui optimasi sistematis pada penggunaan memori, pengolahan data sparsity, regularisasi model, dan parallelisasi proses pembelajaran. Secara matematis, XGBoost bertujuan meminimalkan fungsi objektif gabungan antara fungsi loss (mengukur kesalahan prediksi) dan fungsi regularisasi (mengendalikan kompleksitas model), sehingga tidak hanya fokus pada fitting data tetapi juga menghindari overfitting.
+      XGBoost (Extreme Gradient Boosting) adalah algoritma ensemble learning berbasis gradient boosting yang dirancang untuk membangun model prediksi dengan akurasi tinggi dan skalabilitas luar biasa. XGBoost memperbaiki pendekatan gradient boosting tradisional melalui optimasi sistematis pada penggunaan memori, pengolahan data sparsity, regularisasi model, dan parallelisasi proses pembelajaran. Secara matematis, XGBoost bertujuan meminimalkan fungsi objektif gabungan antara fungsi loss (mengukur kesalahan prediksi) dan fungsi regularisasi (mengendalikan kompleksitas model), sehingga tidak hanya fokus pada fitting data tetapi juga menghindari overfitting [6].
 
-      Model prediksi dibangun secara aditif, di mana pada setiap iterasi $t$, model baru $f_t(x)$ ditambahkan untuk mengurangi error dari prediksi sebelumnya. Fungsi objektif pada iterasi ke- $t$ dirumuskan sebagai:
+      Model prediksi dibangun secara aditif, di mana pada setiap iterasi $t$, model baru $f_t(x)$ ditambahkan untuk mengurangi error dari prediksi sebelumnya. Fungsi objektif pada iterasi ke- $t$ dirumuskan sebagai [6]:
       
       $\mathcal{L}^{(t)} = \sum_{i=1}^{n} l(y_i, \hat{y}_i^{(t-1)} + f_t(\mathbf{x}_i)) + \Omega(f_t)$
 
@@ -63,9 +63,9 @@ Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan un
       - Kurang Efisien untuk Data Kecil Sederhana
     - Algoritma Support Vector Regressor
 
-      Support Vector Regression (SVR) adalah algoritma regresi berbasis prinsip Support Vector Machines (SVM) yang bertujuan untuk menemukan fungsi $f(x)$ yang menyimpang maksimal sebesar $\varepsilon$ dari nilai aktual target $y_i$, sekaligus menjaga fungsi tetap sesederhana mungkin. SVR berupaya meminimalkan kompleksitas model dengan menjaga vektor bobot $w$ tetap kecil, menggunakan konsep $ε$-insensitive loss function. Artinya, prediksi yang meleset kurang dari $\varepsilon$ diabaikan, sementara deviasi lebih besar dari $\varepsilon$ dihukum secara proporsional. Pendekatan ini sangat sesuai untuk aplikasi prediksi harga saham seperti Bank BCA (BBCA), di mana toleransi terhadap deviasi kecil penting dalam memperhalus model terhadap fluktuasi minor pasar.
+      Support Vector Regression (SVR) adalah algoritma regresi berbasis prinsip Support Vector Machines (SVM) yang bertujuan untuk menemukan fungsi $f(x)$ yang menyimpang maksimal sebesar $\varepsilon$ dari nilai aktual target $y_i$, sekaligus menjaga fungsi tetap sesederhana mungkin. SVR berupaya meminimalkan kompleksitas model dengan menjaga vektor bobot $w$ tetap kecil, menggunakan konsep $ε$-insensitive loss function. Artinya, prediksi yang meleset kurang dari $\varepsilon$ diabaikan, sementara deviasi lebih besar dari $\varepsilon$ dihukum secara proporsional. Pendekatan ini sangat sesuai untuk aplikasi prediksi harga saham seperti Bank BCA (BBCA), di mana toleransi terhadap deviasi kecil penting dalam memperhalus model terhadap fluktuasi minor pasar [7].
 
-      Secara matematis, SVR memformulasikan masalah optimasi sebagai berikut:
+      Secara matematis, SVR memformulasikan masalah optimasi sebagai berikut [7]:
 
       $\text{minimize} \quad \frac{1}{2} \lVert w \rVert^2 + C \sum_{i=1}^{\ell} (\xi_i + \xi_i^*)$
 
@@ -84,9 +84,9 @@ $f(x) = \sum_{i=1}^{\ell} (\alpha_i - \alpha_i^*) k(x_i, x) + b.$
 
    - Algoritma Long Short-Term Memory
 
-     Long Short-Term Memory (LSTM) adalah salah satu jenis jaringan saraf tiruan yang dikembangkan oleh Sepp Hochreiter dan Jürgen Schmidhuber pada tahun 1997. Arsitektur ini dirancang untuk mengatasi kelemahan utama pada Recurrent Neural Network (RNN), yaitu hilangnya gradien (vanishing gradient) ketika memproses data sekuensial dalam jangka panjang. LSTM sangat sesuai digunakan untuk data deret waktu (time series), termasuk dalam prediksi harga saham, karena kemampuannya dalam menyimpan dan mengelola informasi historis dalam periode waktu yang panjang.
+     Long Short-Term Memory (LSTM) adalah salah satu jenis jaringan saraf tiruan yang dikembangkan oleh Sepp Hochreiter dan Jürgen Schmidhuber pada tahun 1997. Arsitektur ini dirancang untuk mengatasi kelemahan utama pada Recurrent Neural Network (RNN), yaitu hilangnya gradien (vanishing gradient) ketika memproses data sekuensial dalam jangka panjang. LSTM sangat sesuai digunakan untuk data deret waktu (time series), termasuk dalam prediksi harga saham, karena kemampuannya dalam menyimpan dan mengelola informasi historis dalam periode waktu yang panjang [8].
 
-     Sebelum membahas alur kerja LSTM secara detail, berikut adalah fungsi-fungsi aktivasi utama yang digunakan dalam proses perhitungan:
+     Sebelum membahas alur kerja LSTM secara detail, berikut adalah fungsi-fungsi aktivasi utama yang digunakan dalam proses perhitungan [8]:
 
      a. Fungsi Aktivasi
   
@@ -234,15 +234,15 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
    Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (training data) dan data uji (testing data) dengan perbandingan rasio sebesar 80 : 20
 
    ```python
-    split = int(len(data) * 0.8)
-    train = data[:split]
-    test = data[split:]
+   split = int(len(data) * 0.8)
+   train = data[:split]
+   test = data[split:]
    ```
    Setelah itu mengubah bentuk data train dan test menjadi array 2D. Langkah ini diperlukan untuk kompatibilitas dengan algoritma machine learning dan deep learning.
 
    ```python
-    train = train.values.reshape(-1, 1)
-    test = test.values.reshape(-1, 1)
+   train = train.values.reshape(-1, 1)
+   test = test.values.reshape(-1, 1)
    ```
 
    `-1` berarti ukuran dimensi pertama disesuaikan otomatis, `1` menandakan satu fitur/kolom.
@@ -264,25 +264,36 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
    - Windowing Machine learning
 
      ```python
-        def create_sequences(data, window_size):
+     def create_sequences(data, window_size):
         X, y = [], []
         for i in range(len(data) - window_size):
             X.append(data[i:i+window_size])
             y.append(data[i+window_size])
-        return np.array(X), np.array(y)
+     return np.array(X), np.array(y)
+     window_size = 30
+     X_train_seq, y_train_seq = create_sequences(xtrain, window_size)
+     X_test_seq, y_test_seq = create_sequences(xtest, window_size)
+     X_train_seq = X_train_seq.reshape(X_train_seq.shape[0], -1)
+     X_test_seq = X_test_seq.reshape(X_test_seq.shape[0], -1)
      ```
    - Windowing Deep Learning
 
      ```python
-        def windowed_dataset(series, window_size, batch_size, shuffle_buffer):
-            ds = tf.data.Dataset.from_tensor_slices(series)
-            ds = ds.window(window_size + 1, shift=1, drop_remainder=True)
-            ds = ds.flat_map(lambda w: w.batch(window_size + 1))
-            ds = ds.shuffle(shuffle_buffer)
-            ds = ds.map(lambda w: (w[:-1], w[1:]))
-         return ds.batch(batch_size).prefetch(1)
+     def windowed_dataset(series, window_size, batch_size, shuffle_buffer):
+         ds = tf.data.Dataset.from_tensor_slices(series)
+         ds = ds.window(window_size + 1, shift=1, drop_remainder=True)
+         ds = ds.flat_map(lambda w: w.batch(window_size + 1))
+         ds = ds.shuffle(shuffle_buffer)
+         ds = ds.map(lambda w: (w[:-1], w[1:]))
+     return ds.batch(batch_size).prefetch(1)
+     window_size=30
+     batch_size=32
+     shuffle_buffer_size=1000
+     train_dataset = windowed_dataset(xtrain, window_size=window_size, batch_size=batch_size, shuffle_buffer=shuffle_buffer_size)
+     test_dataset = windowed_dataset(xtest, window_size=window_size, batch_size=batch_size, shuffle_buffer=shuffle_buffer_size)
      ```
-
+     Pada kedua windowing, proses dilakukan dengan mengambil 30 hari sebelumnya untuk memprediksi harga saham 1 hari kedepan.
+     
 ### Modelling
 
 Setelah dilakukannya tahap data preparation, selanjutnya adalah melakukan tahap persiapan model terlebih dahulu sebelum mengembangkan model menggunakan algoritma yang telah ditentukan. Tahap persiapan dataframe untuk analisis model menggunakan parameter index, yaitu train_mse dan test_mse, serta parameter columns yang merupakan algoritma yang akan digunakan untuk melakukan prediksi, yaitu algoritma XGBoost, Support Vector Regression (SVR), dan Long Short-Term Memory (LSTM).
@@ -298,7 +309,7 @@ Kemudian terapkan ketiga algoritma ke dalam model tersebut.
    Pada algoritma XGBoost, semua parameter yang digunakan merupakan nilai default dari Pustaka `xgboost`.
 
    ```python
-    XGBoost = xgb.XGBRegressor()
+   XGBoost = xgb.XGBRegressor()
    ```
 
    Kemudian akan dilakukan analisis prediksi error menggunakan Mean Squared Error (MSE) pada data latih (training data) dan data uji (testing data)
@@ -309,9 +320,71 @@ Kemudian terapkan ketiga algoritma ke dalam model tersebut.
    models.loc['test_mse','XGBoost'] = mean_squared_error(y_pred = XGBoost.predict(X_test_seq), y_true=y_test_seq)
    ```
 
-2. Support Vector Regression
+2. Support Vector Regression (SVR)
 
-   Pada algoritma XGBoost, semua parameter yang digunakan merupakan nilai default dari Pustaka `xgboost`.
+   Pada algoritma SVR, semua parameter yang digunakan merupakan nilai default dari Pustaka `sklearn.svm`.
+
+   ```python
+   svr = SVR()
+   ```
+   Kemudian akan dilakukan analisis prediksi error menggunakan Mean Squared Error (MSE) pada data latih (training data) dan data uji (testing data)
+
+   ```python
+   svr.fit(X_train_seq, y_train_seq.ravel())
+   models.loc['train_mse','SVR'] = mean_squared_error(y_pred = svr.predict(X_train_seq), y_true=y_train_seq.ravel())
+   models.loc['test_mse','SVR'] = mean_squared_error(y_pred = svr.predict(X_test_seq), y_true=y_test_seq.ravel())
+   ```
+   `.ravel()`: Mengubah array multidimensi menjadi 1D
+
+3. Long Short-Term Memory
+
+   Model LSTM yang dibangun merupakan pendekatan canggih untuk prediksi time series menggunakan deep learning. Arsitektur model diawali dengan Sequential model dari TensorFlow Keras, yang memungkinkan pembangunan jaringan saraf berlapis. Struktur model terdiri dari dua layer LSTM berurutan - pertama dengan 64 unit dan kedua dengan 32 unit, keduanya menggunakan aktivasi ReLU. Layer pertama dikonfigurasi untuk mengembalikan urutan penuh, yang memungkinkan layer berikutnya menerima informasi komprehensif. Kemudian, layer Dense tunggal berfungsi sebagai output, menghasilkan prediksi numerik tunggal. Proses kompilasi menggunakan optimizer Adam dan loss function Mean Squared Error, yang merupakan pilihan umum untuk masalah regresi. Pelatihan dilakukan selama 10 epoch, dengan dataset pelatihan dan validasi yang terpisah untuk memastikan model tidak overfitting.
+
+   ```python
+   model_lstm = tf.keras.models.Sequential()
+   model_lstm.add(tf.keras.layers.LSTM(64, activation='relu', return_sequences=True, input_shape=(window_size, 1)))
+   model_lstm.add(tf.keras.layers.LSTM(32, activation='relu'))
+   model_lstm.add(tf.keras.layers.Dense(1))
+   model_lstm.compile(optimizer='adam', loss='mean_squared_error')
+   history = model_lstm.fit(train_dataset, epochs=10, validation_data=test_dataset)
+   y_pred = model_lstm.predict(test_dataset)
+   models.loc['train_mse', 'LSTM'] = model_lstm.evaluate(train_dataset, verbose=0)
+   models.loc['test_mse', 'LSTM'] = model_lstm.evaluate(test_dataset)
+   ```
+
+### Evaluation
+Selanjutnya adalah tahap evaluasi performa model dengan fokus pada perbandingan Mean Squared Error (MSE) antarmodel. Proses dimulai dengan membuat DataFrame kosong bernama `results_df` yang memiliki dua index utama: `train_mse` dan `test_mse`. Ini memungkinkan perbandingan langsung performa model pada dataset pelatihan dan pengujian. Selanjutnya, sel mengisi DataFrame dengan nilai MSE untuk tiga model yang berbeda: XGBoost, SVR (Support Vector Regression), dan LSTM. Setiap kolom model akan berisi dua nilai - MSE untuk data latih dan data uji.
+```python
+results_df = pd.DataFrame(index=['train_mse', 'test_mse'])
+results_df['XGBoost'] = [models.loc['train_mse', 'XGBoost'], models.loc['test_mse', 'XGBoost']]
+results_df['SVR'] = [models.loc['train_mse', 'SVR'], models.loc['test_mse', 'SVR']]
+results_df['LSTM'] = [models.loc['train_mse', 'LSTM'], models.loc['test_mse', 'LSTM']]
+```
+Dengan menampilkan `results_df`, peneliti dapat dengan mudah membandingkan performa model berdasarkan tingkat kesalahan prediksi pada dataset pelatihan dan pengujian. Semakin rendah nilai MSE, semakin baik model dalam memprediksi data. Berikut merupakan output perbandingan performa model:
+
+<img src="https://github.com/user-attachments/assets/15974109-72d9-4bba-b9df-217d68d907ab" alt="MSE Model" title="MSE Model">
+
+Dari gambar tersebut, model yang memiliki tingkat kestabilan antara data train dan test melalui perhitungan MSE adalah model LSTM, sehingga Model LSTM akan digunakan untuk prediksi harga saham bank bca untuk 1 hari kedepan.
+
+```python
+last_window = xtrain[-window_size:].reshape(1, -1)
+last_window_reshaped = last_window.reshape(1, window_size, 1)
+prediksi_hari_depan = model_lstm.predict(last_window_reshaped)
+prediksi_asli = scaler.inverse_transform(prediksi_hari_depan)
+print("Prediksi harga penutupan hari berikutnya:", prediksi_asli[0][0])
+```
+<img src="https://github.com/user-attachments/assets/fb9b7509-7d02-43c4-9e93-0dd6a500430e" alt="LSTM Prediction" title="LSTM Prediction">
+
+Dari prediksi harga saham bank bca, model memprediksi bahwa untuk 1 hari kedepan akan diperoleh penutupan sebesar Rp. 9581.318.
+
+
+
+
+
+
+   
+
+
 
 
 
@@ -327,3 +400,9 @@ Kemudian terapkan ketiga algoritma ke dalam model tersebut.
 [4] Fischer, Thomas, dan Krauss, Christopher. Deep learning with long short-term memory networks for financial market predictions. Neurocomputing, 2018.
 
 [5] Fama, Eugene F. Efficient Capital Markets: A Review of Theory and Empirical Work. Journal of Finance, 1970.
+
+[6] Chen, T., University of Washington, Guestrin, C., & University of Washington. (2016). XGBOOST: a scalable tree boosting System (p. 785) [Journal-article]. http://dx.doi.org/10.1145/2939672.2939785
+
+[7] Smola, A., & Scholkopf, B. (2004). A tutorial on support vector regression. Statistics and Computing, 14, 199–222.
+
+[8] Hochreiter, S., PhD, Schmidhuber, J., Ronald Williams, Fakultät für Informatik, Technische Universität München, & IDSIA. (1997). Long Short-Term memory. In Massachusetts Institute of Technology, Neural Computation (Vols. 9–9, pp. 1735–1780). https://deeplearning.cs.cmu.edu/F23/document/readings/LSTM.pdf
