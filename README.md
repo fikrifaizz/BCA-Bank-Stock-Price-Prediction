@@ -140,7 +140,7 @@ $f(x) = \sum_{i=1}^{\ell} (\alpha_i - \alpha_i^*) k(x_i, x) + b.$
 ### Data Understanding
 <img src="https://github.com/user-attachments/assets/50b06b86-ce51-438e-a5e4-011d8b1012a6" alt="Profil Bank BCA" title="Profil Bank BCA">
 
-Data yang digunakan dalam proyek ini adalah data yang diambil dari Bursa Efek Indonesia mulai dari tahun 2021 hingga 2025. Dari data tersebut, masih perlu dilakukan penyesuaian hingga dataset dapat benar-benar digunakan, yaitu:
+Data yang digunakan dalam proyek ini adalah data yang diambil dari [Bursa Efek Indonesia](https://www.idx.co.id/id/perusahaan-tercatat/profil-perusahaan-tercatat/BBCA) mulai dari tahun 2021 hingga 2025. Dari data tersebut, masih perlu dilakukan penyesuaian hingga dataset dapat benar-benar digunakan, yaitu:
 - Mengubah format atau tipe data pada kolom Tanggal dari object menjadi datetime64[ns]:
   ```python
   data['Tanggal'] = pd.to_datetime(data['Tanggal'])
@@ -154,15 +154,100 @@ Kemudian dilakukan proses Exploratory Data Analysis (EDA) sebagai investigasi aw
 
    Berikut adalah informasi mengenai variabel-variabel yang terdapat pada dataset Harga Saham Bank BCA adalah sebagai berikut
 
-   <img src="https://github.com/user-attachments/assets/17d235e8-7dc3-4050-b9bc-ca85cea1c434" alt="Deskripsi Variabel" title="Deskripsi Variabel" width="100" height="110">
+   <img src="https://github.com/user-attachments/assets/17d235e8-7dc3-4050-b9bc-ca85cea1c434" alt="Deskripsi Variabel" title="Deskripsi Variabel" width="300" height="300">
+
+   Dari gambar di atas dapat dilihat bahwa terdapat 1.000 baris data dan 9 kolom atribut atau fitur. Di antaranya adalah delapan (8) atribut/variabel dengan tipe data int64 non-null dan satu (1) atribut/variabel dengan tipe data datetime64[ns]. Berikut adalah keterangan untuk masing-masing variabel,
+   - No : Nomor urut data/informasi pada tabel.
+   - Tanggal : Tanggal terjadinya data harga saham tersebut (berformat YYYY-MM-DD).
+   - Harga Pembukaan : Harga saham saat pasar dibuka pada hari itu.
+   - Tertinggi : Harga tertinggi yang dicapai saham selama hari perdagangan.
+   - Terendah : Harga terendah yang dicapai saham selama hari perdagangan.
+   - Penutupan : Harga saham saat pasar ditutup pada hari itu.
+   - Volume : Jumlah lembar saham yang diperdagangkan selama hari tersebut.
+   - Nilai : Total nilai perdagangan saham pada hari itu.
+   - Frekuensi : Jumlah transaksi yang berlangsung selama hari perdagangan tersebut.
+
+2. Deskripsi Statistik
+
+    <img src="https://github.com/user-attachments/assets/9461713c-3c9f-40b4-ab46-f6b1c14e3526" alt="Deskripsi Variabel" title="Deskripsi Variabel" width="600" height="500">
+
+3. Menangani Outliers
+
+    Outliers merupakan sampel data yang nilainya berada sangat jauh dari cakupan umum data utama yang dapat merusak hasil analisis data. Berikut adalah visualisasi boxplot untuk melakukan pengecekan keberadaan outliers.
+
+    <img src="https://github.com/user-attachments/assets/f4101397-1200-4c09-aa78-3dca62306e39" alt="Outliers" title="Outliers" width="700" height="500">
+
+    Berdasarkan gambar tersebut, terdapat outliers pada semua fitur kecuali fitur No. Sehingga dilakukan proses pembersihan outliers dengan metode IQR (Inter Quartile Range).
+
+    $IQR = Q3 − Q1$
+
+   Kemudian membuat batas bawah dan batas atas untuk mencakup outliers dengan menggunakan,
+
+   $Batas Bawah = Q1 − 1.5 * IQR$
    
-3. 1
-4. f
-5. a
-6. 
+   $Batas Atas = Q3 − 1.5 * IQR$
+
+    Setelah dilakukan pembersihan outliers, dilakukan kembali visualisasi outliers untuk melakukan pengecekan kembali sebagai berikut,
+
+    <img src="https://github.com/user-attachments/assets/84f69727-f24f-4a66-b271-b1fc02c3222a" alt="Handle Outliers" title="Handle Outliers" width="700" height="500">
+
+    Dari gambar di atas dapat dilihat bahwa outliers telah berkurang. Meskipun outliers masih terdapat pada fitur Nilai, Volume dan Frekuensi, tetapi masih dalam batas aman.
+
+4. Univariate Analysis
+
+   Melakukan proses analisis data univariate pada fitur-fitur numerik. Proses analisis ini menggunakan bantuan visualisasi histogram untuk masing-masing fitur numerik.
+
+   <img src="https://github.com/user-attachments/assets/999ef5ef-eab0-43a4-92d3-ae2a6e998020" alt="Univariate Analysis" title="Univariate Analysis" width="1000" height="800">
+
+   Dari data histogram di atas diperoleh informasi, yaitu:
+
+   - No: Nilai berkisar 0-16, mayoritas data berada di rentang 8-14.
+   - Tanggal: Data terkumpul dari 2021-2025, menunjukkan fluktuasi periodik.
+   - Harga Pembukaan: Distribusi bimodal dengan puncak di sekitar 9000 dan 7500-8000.
+   - Tertinggi: Puncak di sekitar 8500-9000, nilai maksimum sekitar 40.
+   - Terendah: Puncak di sekitar 9000, pola serupa dengan data "Tertinggi".
+   - Penutupan: Puncak di sekitar 9000, konsisten dengan data harga lainnya.
+   - Volume: Distribusi condong kanan, mayoritas di sekitar 0,6-0,8 (x10^8).
+   - Nilai: Condong kanan, konsentrasi di sekitar 0,5-0,8 (x10^12).
+   - Frekuensi: Condong kanan, mayoritas berada di 10000-15000.
+
+5. Multivariate Analysis
+
+   Melakukan visualisasi distribusi data pada fitur-fitur numerik dari data. Visualisasi dilakukan dengan bantuan library seaborn pairplot menggunakan parameter diag_kind, yaitu kde, untuk melihat perkiraan distribusi probabilitas antar fitur numerik.
+
+   <img src="https://github.com/user-attachments/assets/9cb077f5-f954-4615-ab24-378b6e863dd6" alt="Multivariate Analysis" title="Multivariate Analysis">
+
+6. Correlation Matrix with Heatmap
+
+   Melakukan pengecekan korelasi antar fitur numerik dengan menggunakan visualisasi diagram heatmap correlation matrix.
+
+   <img src="https://github.com/user-attachments/assets/f7ec0d76-e046-4f57-b99b-9dc44b18c2c0" alt="Correlation Matrix" title="Correlation Matrix">
+
+### Data Preparation
+Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan yang sudah dipaparkan pada bagian Solution Statements. Tahap ini penting dilakukan untuk mempersiapkan data sehingga dapat digunakan untuk melatih model machine learning/deep learning dengan baik. Berikut adalah dua tahapan data preparation yang dilakukan, yaitu,
+1. Penetapan Fitur yang digunakan
+
+   Pada prediksi harga saham bank bca untuk 1 hari kedepan, fitur yang digunakan hanya fitur `Penutupan` sehingga selain fitur `Penutupan` tidak digunakan dalam prediksi.
+
+2. Split Data
+
+   Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (training data) dan data uji (testing data) dengan perbandingan rasio sebesar 80 : 20
+
+   ```python
+    split = int(len(data) * 0.8)
+    train = data[:split]
+    test = data[split:]
+   ```
+   Setelah itu mengubah bentuk data train dan test menjadi array 2D. Langkah ini diperlukan untuk kompatibilitas dengan algoritma machine learning dan deep learning.
+
+   ```python
+    train = train.values.reshape(-1, 1)
+    test = test.values.reshape(-1, 1)
+   ```
+
+   `-1` berarti ukuran dimensi pertama disesuaikan otomatis, `1` menandakan satu fitur/kolom.
 
 
-     
       
 
 ## Referensi
