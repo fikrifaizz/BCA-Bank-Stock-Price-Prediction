@@ -215,7 +215,7 @@ Kemudian dilakukan proses Exploratory Data Analysis (EDA) sebagai investigasi aw
 
    Melakukan visualisasi distribusi data pada fitur-fitur numerik dari data. Visualisasi dilakukan dengan bantuan library seaborn pairplot menggunakan parameter diag_kind, yaitu kde, untuk melihat perkiraan distribusi probabilitas antar fitur numerik.
 
-   <img src="https://github.com/user-attachments/assets/9cb077f5-f954-4615-ab24-378b6e863dd6" alt="Multivariate Analysis" title="Multivariate Analysis">
+   <img src="https://github.com/user-attachments/assets/f6eeae97-51d1-4b5e-b8bb-af6a0052250e" alt="Multivariate Analysis" title="Multivariate Analysis">
 
 6. Correlation Matrix with Heatmap
 
