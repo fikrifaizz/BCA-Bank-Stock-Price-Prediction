@@ -140,15 +140,8 @@ $f(x) = \sum_{i=1}^{\ell} (\alpha_i - \alpha_i^*) k(x_i, x) + b.$
 ### Data Understanding
 <img src="https://github.com/user-attachments/assets/50b06b86-ce51-438e-a5e4-011d8b1012a6" alt="Profil Bank BCA" title="Profil Bank BCA">
 
-Data yang digunakan dalam proyek ini adalah data yang diambil dari [Bursa Efek Indonesia](https://www.idx.co.id/id/perusahaan-tercatat/profil-perusahaan-tercatat/BBCA) mulai dari tahun 2021 hingga 2025. Dari data tersebut, masih perlu dilakukan penyesuaian hingga dataset dapat benar-benar digunakan, yaitu:
-- Mengubah format atau tipe data pada kolom Tanggal dari object menjadi datetime64[ns]:
-  ```python
-  data['Tanggal'] = pd.to_datetime(data['Tanggal'])
-  ```
-- Karena tujuan dari penelitian ini adalah untuk memprediksi harga saham 1 hari kedepan maka dilakukan pengurutan berdasarkan tanggal dari terlama hingga terbaru
-  ```python
-  data = data.sort_values('Tanggal')
-  ```
+Data yang digunakan dalam proyek ini adalah data yang diambil dari [Bursa Efek Indonesia](https://www.idx.co.id/id/perusahaan-tercatat/profil-perusahaan-tercatat/BBCA) mulai dari tahun 2021 hingga 2025. Dari data tersebut, masih perlu dilakukan penyesuaian hingga dataset dapat benar-benar digunakan
+
 Kemudian dilakukan proses Exploratory Data Analysis (EDA) sebagai investigasi awal untuk menganalisis karakteristik, menemukan pola, anomali, dan memeriksa asumsi pada data dengan menggunakan teknik statistik dan representasi grafis atau visualisasi.
 1. Deskripsi Variabel
 
@@ -225,11 +218,22 @@ Kemudian dilakukan proses Exploratory Data Analysis (EDA) sebagai investigasi aw
 
 ### Data Preparation
 Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan yang sudah dipaparkan pada bagian Solution Statements. Tahap ini penting dilakukan untuk mempersiapkan data sehingga dapat digunakan untuk melatih model machine learning/deep learning dengan baik. Berikut adalah dua tahapan data preparation yang dilakukan, yaitu,
-1. Penetapan Fitur yang digunakan
+1. Sorting Berdasarkan Tanggal
+
+- Mengubah format atau tipe data pada kolom Tanggal dari object menjadi datetime64[ns]:
+  ```python
+  data['Tanggal'] = pd.to_datetime(data['Tanggal'])
+  ```
+- Karena tujuan dari penelitian ini adalah untuk memprediksi harga saham 1 hari kedepan maka dilakukan pengurutan berdasarkan tanggal dari terlama hingga terbaru
+  ```python
+  data = data.sort_values('Tanggal')
+  ```
+
+2. Penetapan Fitur yang digunakan
 
    Pada prediksi harga saham bank bca untuk 1 hari kedepan, fitur yang digunakan hanya fitur `Penutupan` sehingga selain fitur `Penutupan` tidak digunakan dalam prediksi.
 
-2. Split Data
+3. Split Data
 
    Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (training data) dan data uji (testing data) dengan perbandingan rasio sebesar 80 : 20
 
@@ -247,7 +251,7 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
 
    `-1` berarti ukuran dimensi pertama disesuaikan otomatis, `1` menandakan satu fitur/kolom.
 
-3. Normalisasi pada Fitur Numerik
+4. Normalisasi pada Fitur Numerik
 
    Min Max Normalisasi adalah penskalaan ulang data dari rentang asli sehingga semua nilai berada dalam rentang baru 0 dan 1. Penskalaan fitur agar terletak di antara nilai minimum dan maksimum, biasanya antara nol dan satu, atau menskalakan nilai absolut maksimum setiap fitur ke ukuran satuan. Motivasi untuk menggunakan MinMaxScaler adalah untuk mencakup ketahanan terhadap standar deviasi fitur yang sangat kecil.
 
@@ -257,7 +261,7 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
    xtest = scaler.transform(test)
    ```
 
-4. Windowing Data
+5. Windowing Data
 
    Mengubah data time series menjadi urutan untuk prediksi berbasis jendela waktu (windowing). Pada dasarnya, cell ini adalah "mesin penerjemah" data time series menjadi potongan-potongan informasi yang bermakna bagi model machine learning. Proses ini memungkinkan model "belajar" bagaimana harga bergerak berdasarkan sejarah sebelumnya, seperti seorang analis yang mempelajari tren masa lalu untuk memprediksi masa depan. Intinya, windowing adalah "mesin waktu" yang mengubah data mentah menjadi cerita berurutan yang dapat dipahami oleh model machine learning/deep learning.
 
