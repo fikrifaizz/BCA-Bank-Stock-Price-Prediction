@@ -164,27 +164,13 @@ Kemudian dilakukan proses Exploratory Data Analysis (EDA) sebagai investigasi aw
 
     <img src="https://github.com/user-attachments/assets/9461713c-3c9f-40b4-ab46-f6b1c14e3526" alt="Deskripsi Variabel" title="Deskripsi Variabel" width="600" height="500">
 
-3. Menangani Outliers
+3. Pengecekan Outliers
 
     Outliers merupakan sampel data yang nilainya berada sangat jauh dari cakupan umum data utama yang dapat merusak hasil analisis data. Berikut adalah visualisasi boxplot untuk melakukan pengecekan keberadaan outliers.
 
     <img src="https://github.com/user-attachments/assets/f4101397-1200-4c09-aa78-3dca62306e39" alt="Outliers" title="Outliers" width="700" height="500">
 
-    Berdasarkan gambar tersebut, terdapat outliers pada semua fitur kecuali fitur No. Sehingga dilakukan proses pembersihan outliers dengan metode IQR (Inter Quartile Range).
-
-    $IQR = Q3 − Q1$
-
-   Kemudian membuat batas bawah dan batas atas untuk mencakup outliers dengan menggunakan,
-
-   $Batas Bawah = Q1 − 1.5 * IQR$
-   
-   $Batas Atas = Q3 − 1.5 * IQR$
-
-    Setelah dilakukan pembersihan outliers, dilakukan kembali visualisasi outliers untuk melakukan pengecekan kembali sebagai berikut,
-
-    <img src="https://github.com/user-attachments/assets/84f69727-f24f-4a66-b271-b1fc02c3222a" alt="Handle Outliers" title="Handle Outliers" width="700" height="500">
-
-    Dari gambar di atas dapat dilihat bahwa outliers telah berkurang. Meskipun outliers masih terdapat pada fitur Nilai, Volume dan Frekuensi, tetapi masih dalam batas aman.
+    Berdasarkan gambar tersebut, terdapat outliers pada semua fitur kecuali fitur No. Sehingga dilakukan proses pembersihan outliers dengan metode IQR (Inter Quartile Range) di Data Preparation.
 
 4. Univariate Analysis
 
@@ -218,7 +204,24 @@ Kemudian dilakukan proses Exploratory Data Analysis (EDA) sebagai investigasi aw
 
 ### Data Preparation
 Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan yang sudah dipaparkan pada bagian Solution Statements. Tahap ini penting dilakukan untuk mempersiapkan data sehingga dapat digunakan untuk melatih model machine learning/deep learning dengan baik. Berikut adalah dua tahapan data preparation yang dilakukan, yaitu,
-1. Sorting Berdasarkan Tanggal
+
+1. Menangani Outliers
+
+   $IQR = Q3 − Q1$
+
+   Kemudian membuat batas bawah dan batas atas untuk mencakup outliers dengan menggunakan,
+
+   $Batas Bawah = Q1 − 1.5 * IQR$
+   
+   $Batas Atas = Q3 − 1.5 * IQR$
+
+    Setelah dilakukan pembersihan outliers, dilakukan kembali visualisasi outliers untuk melakukan pengecekan kembali sebagai berikut,
+
+    <img src="https://github.com/user-attachments/assets/84f69727-f24f-4a66-b271-b1fc02c3222a" alt="Handle Outliers" title="Handle Outliers" width="700" height="500">
+
+    Dari gambar di atas dapat dilihat bahwa outliers telah berkurang. Meskipun outliers masih terdapat pada fitur Nilai, Volume dan Frekuensi, tetapi masih dalam batas aman.
+
+2. Sorting Berdasarkan Tanggal
 
 - Mengubah format atau tipe data pada kolom Tanggal dari object menjadi datetime64[ns]:
   ```python
@@ -229,11 +232,11 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
   data = data.sort_values('Tanggal')
   ```
 
-2. Penetapan Fitur yang digunakan
+3. Penetapan Fitur yang digunakan
 
    Pada prediksi harga saham bank bca untuk 1 hari kedepan, fitur yang digunakan hanya fitur `Penutupan` sehingga selain fitur `Penutupan` tidak digunakan dalam prediksi.
 
-3. Split Data
+4. Split Data
 
    Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (training data) dan data uji (testing data) dengan perbandingan rasio sebesar 80 : 20
 
@@ -251,7 +254,7 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
 
    `-1` berarti ukuran dimensi pertama disesuaikan otomatis, `1` menandakan satu fitur/kolom.
 
-4. Normalisasi pada Fitur Numerik
+5. Normalisasi pada Fitur Numerik
 
    Min Max Normalisasi adalah penskalaan ulang data dari rentang asli sehingga semua nilai berada dalam rentang baru 0 dan 1. Penskalaan fitur agar terletak di antara nilai minimum dan maksimum, biasanya antara nol dan satu, atau menskalakan nilai absolut maksimum setiap fitur ke ukuran satuan. Motivasi untuk menggunakan MinMaxScaler adalah untuk mencakup ketahanan terhadap standar deviasi fitur yang sangat kecil.
 
@@ -261,7 +264,7 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
    xtest = scaler.transform(test)
    ```
 
-5. Windowing Data
+6. Windowing Data
 
    Mengubah data time series menjadi urutan untuk prediksi berbasis jendela waktu (windowing). Pada dasarnya, cell ini adalah "mesin penerjemah" data time series menjadi potongan-potongan informasi yang bermakna bagi model machine learning. Proses ini memungkinkan model "belajar" bagaimana harga bergerak berdasarkan sejarah sebelumnya, seperti seorang analis yang mempelajari tren masa lalu untuk memprediksi masa depan. Intinya, windowing adalah "mesin waktu" yang mengubah data mentah menjadi cerita berurutan yang dapat dipahami oleh model machine learning/deep learning.
 
