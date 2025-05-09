@@ -310,7 +310,7 @@ models = pd.DataFrame(index=['train_mse', 'test_mse'],
 Kemudian terapkan ketiga algoritma ke dalam model tersebut.
 1. XGBoost
 
-   Pada algoritma XGBoost, semua parameter yang digunakan merupakan nilai default dari Pustaka `xgboost`.
+   XGBoost (Extreme Gradient Boosting) bekerja dengan membangun kumpulan (ensemble) pohon keputusan secara berurutan, di mana setiap pohon baru berusaha memperbaiki kesalahan prediksi pohon sebelumnya. Algoritma ini menggunakan teknik gradient boosting, dengan meminimalkan fungsi loss melalui proses boosting iteratif. Setiap prediksi didasarkan pada agregasi (penjumlahan) hasil semua pohon, membuat model ini kuat dalam menangani data non-linear dan memiliki performa tinggi pada dataset tabular.
 
    ```python
    XGBoost = xgb.XGBRegressor()
@@ -326,7 +326,7 @@ Kemudian terapkan ketiga algoritma ke dalam model tersebut.
 
 2. Support Vector Regression (SVR)
 
-   Pada algoritma SVR, semua parameter yang digunakan merupakan nilai default dari Pustaka `sklearn.svm`.
+   SVR adalah penerapan Support Vector Machine (SVM) untuk regresi. Algoritma ini berusaha menemukan fungsi regresi terbaik yang memiliki deviasi maksimal ε dari semua titik data, sambil tetap menjaga model sesederhana mungkin. Konsep kerjanya adalah mencari hyperplane di ruang berdimensi tinggi dengan margin tertentu, dan memanfaatkan kernel trick (seperti RBF kernel) untuk menangkap pola non-linear pada data. SVR efektif dalam menangani prediksi dengan data yang memiliki noise atau fluktuasi.
 
    ```python
    svr = SVR()
@@ -342,7 +342,7 @@ Kemudian terapkan ketiga algoritma ke dalam model tersebut.
 
 3. Long Short-Term Memory
 
-   Model LSTM yang dibangun merupakan pendekatan canggih untuk prediksi time series menggunakan deep learning. Arsitektur model diawali dengan Sequential model dari TensorFlow Keras, yang memungkinkan pembangunan jaringan saraf berlapis. Struktur model terdiri dari dua layer LSTM berurutan - pertama dengan 64 unit dan kedua dengan 32 unit, keduanya menggunakan aktivasi ReLU. Layer pertama dikonfigurasi untuk mengembalikan urutan penuh, yang memungkinkan layer berikutnya menerima informasi komprehensif. Kemudian, layer Dense tunggal berfungsi sebagai output, menghasilkan prediksi numerik tunggal. Proses kompilasi menggunakan optimizer Adam dan loss function Mean Squared Error, yang merupakan pilihan umum untuk masalah regresi. Pelatihan dilakukan selama 10 epoch, dengan dataset pelatihan dan validasi yang terpisah untuk memastikan model tidak overfitting.
+   Model LSTM yang dibangun merupakan pendekatan canggih untuk prediksi time series menggunakan deep learning. Alur kerjanya melibatkan sel memori dan tiga gerbang utama (input gate, forget gate, output gate) yang bersama-sama mengontrol aliran informasi masuk, tersimpan, dan keluar. Arsitektur model diawali dengan Sequential model dari TensorFlow Keras, yang memungkinkan pembangunan jaringan saraf berlapis. Struktur model terdiri dari dua layer LSTM berurutan - pertama dengan 64 unit dan kedua dengan 32 unit, keduanya menggunakan aktivasi ReLU. Layer pertama dikonfigurasi untuk mengembalikan urutan penuh, yang memungkinkan layer berikutnya menerima informasi komprehensif. Kemudian, layer Dense tunggal berfungsi sebagai output, menghasilkan prediksi numerik tunggal. Proses kompilasi menggunakan optimizer Adam dan loss function Mean Squared Error, yang merupakan pilihan umum untuk masalah regresi. Pelatihan dilakukan selama 10 epoch, dengan dataset pelatihan dan validasi yang terpisah untuk memastikan model tidak overfitting.
 
    ```python
    model_lstm = tf.keras.models.Sequential()
@@ -357,7 +357,7 @@ Kemudian terapkan ketiga algoritma ke dalam model tersebut.
    ```
 
 ### Evaluation
-Selanjutnya adalah tahap evaluasi performa model dengan fokus pada perbandingan Mean Squared Error (MSE) antarmodel. Proses dimulai dengan membuat DataFrame kosong bernama `results_df` yang memiliki dua index utama: `train_mse` dan `test_mse`. Ini memungkinkan perbandingan langsung performa model pada dataset pelatihan dan pengujian. Selanjutnya, sel mengisi DataFrame dengan nilai MSE untuk tiga model yang berbeda: XGBoost, SVR (Support Vector Regression), dan LSTM. Setiap kolom model akan berisi dua nilai - MSE untuk data latih dan data uji.
+Evaluasi performa model dilakukan dengan menggunakan metrik **Mean Squared Error (MSE)**. MSE adalah ukuran kesalahan prediksi yang dihitung dengan cara mengambil rata-rata dari kuadrat selisih antara nilai aktual dengan nilai prediksi. Metrik ini banyak digunakan dalam regresi karena memberikan penalti yang lebih besar terhadap kesalahan prediksi yang signifikan (outlier). Semakin kecil nilai MSE, semakin mendekati nilai prediksi terhadap nilai aktual, sehingga model dianggap memiliki performa yang lebih baik secara kuantitatif. Proses dimulai dengan membuat DataFrame kosong bernama `results_df` yang memiliki dua index utama: `train_mse` dan `test_mse`. Ini memungkinkan perbandingan langsung performa model pada dataset pelatihan dan pengujian. Selanjutnya, sel mengisi DataFrame dengan nilai MSE untuk tiga model yang berbeda: XGBoost, SVR (Support Vector Regression), dan LSTM. Setiap kolom model akan berisi dua nilai - MSE untuk data latih dan data uji.
 ```python
 results_df = pd.DataFrame(index=['train_mse', 'test_mse'])
 results_df['XGBoost'] = [models.loc['train_mse', 'XGBoost'], models.loc['test_mse', 'XGBoost']]
@@ -381,18 +381,12 @@ print("Prediksi harga penutupan hari berikutnya:", prediksi_asli[0][0])
 
 Dari prediksi harga saham bank bca, model memprediksi bahwa untuk 1 hari kedepan akan diperoleh penutupan sebesar Rp. 9581.318.
 
+Berdasarkan hasil evaluasi yang telah dilakukan menggunakan metrik Mean Squared Error (MSE), diperoleh temuan bahwa algoritma **Long Short-Term Memory (LSTM)** memiliki performa prediksi yang paling optimal dibandingkan dengan algoritma XGBoost dan Support Vector Regression (SVR). Hal ini ditunjukkan melalui nilai MSE yang lebih rendah dan stabil baik pada data pelatihan maupun data pengujian, mengindikasikan kemampuan LSTM dalam memodelkan pola historis data harga saham secara lebih efektif.
 
+Melalui implementasi dan analisis yang dilakukan dalam penelitian ini, permasalahan utama yang diajukan sejak awal, yaitu bagaimana memprediksi harga saham Bank BCA untuk satu hari ke depan berdasarkan data historis harga saham, telah terjawab dengan baik. Tujuan penelitian untuk membandingkan performa beberapa algoritma machine learning dan deep learning dalam prediksi harga saham juga berhasil dicapai.
 
+Temuan ini diharapkan dapat memberikan kontribusi sebagai referensi awal dalam pengembangan sistem prediksi harga saham berbasis machine learning, khususnya pada konteks pasar modal Indonesia. Untuk penelitian selanjutnya, disarankan dilakukan pengayaan variabel dengan memasukkan indikator teknikal atau faktor makroekonomi, serta eksplorasi arsitektur deep learning lainnya guna meningkatkan akurasi dan robustitas model prediksi.
 
-
-
-   
-
-
-
-
-
-      
 
 ## Referensi
 [1] Yahoo Finance, BBCA Historical Data, diakses dari https://finance.yahoo.com/quote/BBCA.JK/history
