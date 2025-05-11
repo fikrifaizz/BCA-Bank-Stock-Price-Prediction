@@ -1,4 +1,4 @@
-# Laporan Proyek Machine Learning - Ica Nur Halimah
+<img width="232" alt="image" src="https://github.com/user-attachments/assets/432e3cc3-2a52-4526-9e08-5c23749555cf" /># Laporan Proyek Machine Learning - Ica Nur Halimah
 ## Domain Proyek
 Domain proyek ini akan membahas mengenai permasalahan dalam bidang ekonomi yang dibuat untuk mengetahui prediksi harga Bitcoin USD.
 
@@ -159,7 +159,7 @@ Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan un
 ### Data Understanding
 <img src="https://github.com/user-attachments/assets/694af6e1-c7d2-4f36-bc0e-56f84b75737a" alt="Kaggle Harga Bitcoin" title="Kaggle Harga Bitcoin">
 
-Data yang digunakan dalam proyek ini adalah dataset yang diambil dari Kaggle Dataset Bitcoin Price (USD) dengan kategori dataset, yaitu Currencies and Foreign Exchange. Dalam dataset tersebut terdapat sebuah file atau berkas dengan nama main.csv yang berekstensi (file format) .csv atau comma-separated values berukuran 28,44 MB.
+Data yang digunakan dalam proyek ini adalah dataset yang diambil dari Kaggle [Dataset Bitcoin Price (USD)](https://www.kaggle.com/datasets/aakashverma8900/bitcoin-price-usd) dengan kategori dataset, yaitu Currencies and Foreign Exchange. Dalam dataset tersebut terdapat sebuah file atau berkas dengan nama main.csv yang berekstensi (file format) .csv atau comma-separated values berukuran 28,44 MB.
 
 Kemudian dilakukan proses Exploratory Data Analysis (EDA) sebagai investigasi awal untuk menganalisis karakteristik, menemukan pola, anomali, dan memeriksa asumsi pada data dengan menggunakan teknik statistik dan representasi grafis atau visualisasi.
 1. Deskripsi Variabel
@@ -258,44 +258,20 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
    
    $Batas Atas = Q3 − 1.5 * IQR$
 
-    Setelah dilakukan pembersihan outliers, dilakukan kembali visualisasi outliers untuk melakukan pengecekan kembali sebagai berikut,
+   Setelah dilakukan pembersihan outliers, dilakukan kembali visualisasi outliers untuk melakukan pengecekan kembali sebagai berikut,
+   
+   <img src="https://github.com/user-attachments/assets/49f420d9-6d74-4172-be3e-9ea5856cd9f2" alt="Handle Outliers" title="Handle Outliers" width="700" height="500">
 
-    <img src="https://github.com/user-attachments/assets/84f69727-f24f-4a66-b271-b1fc02c3222a" alt="Handle Outliers" title="Handle Outliers" width="700" height="500">
+    Seletah dilakukan pembersihan outliers menggunakan metode IQR (Inter Quartile Range), dapat dilihat bahwa outliers telah tidak ada dalam data.
 
-    Dari gambar di atas dapat dilihat bahwa outliers telah berkurang. Meskipun outliers masih terdapat pada fitur Nilai, Volume dan Frekuensi, tetapi masih dalam batas aman.
+2. Split Data
 
-2. Sorting Berdasarkan Tanggal
-
-- Mengubah format atau tipe data pada kolom Tanggal dari object menjadi datetime64[ns]:
-  ```python
-  data['Tanggal'] = pd.to_datetime(data['Tanggal'])
-  ```
-- Karena tujuan dari penelitian ini adalah untuk memprediksi harga saham 1 hari kedepan maka dilakukan pengurutan berdasarkan tanggal dari terlama hingga terbaru
-  ```python
-  data = data.sort_values('Tanggal')
-  ```
-
-3. Penetapan Fitur yang digunakan
-
-   Pada prediksi harga saham bank bca untuk 1 hari kedepan, fitur yang digunakan hanya fitur `Penutupan` sehingga selain fitur `Penutupan` tidak digunakan dalam prediksi.
-
-4. Split Data
-
-   Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (training data) dan data uji (testing data) dengan perbandingan rasio sebesar 80 : 20
-
-   ```python
-   split = int(len(data) * 0.8)
-   train = data[:split]
-   test = data[split:]
+   Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (training data) dan data uji (testing data) dengan perbandingan rasio sebesar 90 : 10 menggunakan `train_test_split`. Kemudian diperoleh hasil pembagian data masing-masing, yaitu sebagai berikut,
    ```
-   Setelah itu mengubah bentuk data train dan test menjadi array 2D. Langkah ini diperlukan untuk kompatibilitas dengan algoritma machine learning dan deep learning.
-
-   ```python
-   train = train.values.reshape(-1, 1)
-   test = test.values.reshape(-1, 1)
+   Total seluruh sampel : 188317
+   Total data train     : 150653
+   Total data test      : 37664
    ```
-
-   `-1` berarti ukuran dimensi pertama disesuaikan otomatis, `1` menandakan satu fitur/kolom.
 
 5. Normalisasi pada Fitur Numerik
 
@@ -306,133 +282,116 @@ Pada tahap persiapan data atau data preparation dilakukan berdasarkan penjelasan
    xtrain = scaler.fit_transform(train)
    xtest = scaler.transform(test)
    ```
-
-6. Windowing Data
-
-   Mengubah data time series menjadi urutan untuk prediksi berbasis jendela waktu (windowing). Pada dasarnya, cell ini adalah "mesin penerjemah" data time series menjadi potongan-potongan informasi yang bermakna bagi model machine learning. Proses ini memungkinkan model "belajar" bagaimana harga bergerak berdasarkan sejarah sebelumnya, seperti seorang analis yang mempelajari tren masa lalu untuk memprediksi masa depan. Intinya, windowing adalah "mesin waktu" yang mengubah data mentah menjadi cerita berurutan yang dapat dipahami oleh model machine learning/deep learning.
-
-   - Windowing Machine learning
-
-     ```python
-     def create_sequences(data, window_size):
-        X, y = [], []
-        for i in range(len(data) - window_size):
-            X.append(data[i:i+window_size])
-            y.append(data[i+window_size])
-     return np.array(X), np.array(y)
-     window_size = 30
-     X_train_seq, y_train_seq = create_sequences(xtrain, window_size)
-     X_test_seq, y_test_seq = create_sequences(xtest, window_size)
-     X_train_seq = X_train_seq.reshape(X_train_seq.shape[0], -1)
-     X_test_seq = X_test_seq.reshape(X_test_seq.shape[0], -1)
-     ```
-   - Windowing Deep Learning
-
-     ```python
-     def windowed_dataset(series, window_size, batch_size, shuffle_buffer):
-         ds = tf.data.Dataset.from_tensor_slices(series)
-         ds = ds.window(window_size + 1, shift=1, drop_remainder=True)
-         ds = ds.flat_map(lambda w: w.batch(window_size + 1))
-         ds = ds.shuffle(shuffle_buffer)
-         ds = ds.map(lambda w: (w[:-1], w[1:]))
-     return ds.batch(batch_size).prefetch(1)
-     window_size=30
-     batch_size=32
-     shuffle_buffer_size=1000
-     train_dataset = windowed_dataset(xtrain, window_size=window_size, batch_size=batch_size, shuffle_buffer=shuffle_buffer_size)
-     test_dataset = windowed_dataset(xtest, window_size=window_size, batch_size=batch_size, shuffle_buffer=shuffle_buffer_size)
-     ```
-     Pada kedua windowing, proses dilakukan dengan mengambil 30 hari sebelumnya untuk memprediksi harga saham 1 hari kedepan.
      
-### Modelling
+### Model Development
 
-Setelah dilakukannya tahap data preparation, selanjutnya adalah melakukan tahap persiapan model terlebih dahulu sebelum mengembangkan model menggunakan algoritma yang telah ditentukan. Tahap persiapan dataframe untuk analisis model menggunakan parameter index, yaitu train_mse dan test_mse, serta parameter columns yang merupakan algoritma yang akan digunakan untuk melakukan prediksi, yaitu algoritma XGBoost, Support Vector Regression (SVR), dan Long Short-Term Memory (LSTM).
+Setelah dilakukannya tahap data preparation, selanjutnya adalah melakukan tahap persiapan model terlebih dahulu sebelum mengembangkan model menggunakan algoritma yang telah ditentukan. Tahap persiapan dataframe untuk analisis model menggunakan parameter index, yaitu train_mse dan test_mse, serta parameter columns yang merupakan algoritma yang akan digunakan untuk melakukan prediksi, yaitu algoritma K-Nearest Neighbors (KNN), Linear Regression (LR), dan Random Forest (RF).
 
 ```python
 models = pd.DataFrame(index=['train_mse', 'test_mse'],
-                      columns=['XGBoost', 'SVR', 'LSTM'])
+                      columns=['KNN', 'LR', 'RF'])
 ```
 
 Kemudian terapkan ketiga algoritma ke dalam model tersebut.
-1. XGBoost
+1. K-Nearest Neighbors
 
-   XGBoost (Extreme Gradient Boosting) bekerja dengan membangun kumpulan (ensemble) pohon keputusan secara berurutan, di mana setiap pohon baru berusaha memperbaiki kesalahan prediksi pohon sebelumnya. Algoritma ini menggunakan teknik gradient boosting, dengan meminimalkan fungsi loss melalui proses boosting iteratif. Setiap prediksi didasarkan pada agregasi (penjumlahan) hasil semua pohon, membuat model ini kuat dalam menangani data non-linear dan memiliki performa tinggi pada dataset tabular.
+   KNN adalah algoritma machine learning yang memprediksi berdasarkan kedekatan data. Cara kerjanya sederhana: menyimpan semua data training, menghitung jarak ke data baru, memilih K tetangga terdekat, lalu mengambil keputusan dari mayoritas (klasifikasi) atau rata-rata (regresi) tetangga tersebut. Meski mudah dipahami dan fleksibel, KNN membutuhkan komputasi tinggi untuk dataset besar dan sensitif terhadap skala fitur.
 
    ```python
-   XGBoost = xgb.XGBRegressor()
+   knn = KNeighborsRegressor(n_neighbors=5,
+    weights='uniform',
+    metric='manhattan',
+    p=1,
+    algorithm='auto'
+    )
    ```
 
    Kemudian akan dilakukan analisis prediksi error menggunakan Mean Squared Error (MSE) pada data latih (training data) dan data uji (testing data)
 
    ```python
-   XGBoost.fit(X_train_seq, y_train_seq)
-   models.loc['train_mse','XGBoost'] = mean_squared_error(y_pred = XGBoost.predict(X_train_seq), y_true=y_train_seq)
-   models.loc['test_mse','XGBoost'] = mean_squared_error(y_pred = XGBoost.predict(X_test_seq), y_true=y_test_seq)
+   knn.fit(xtrain, ytrain)
+   models.loc['train_mse','KNN'] = mean_squared_error(y_pred = knn.predict(xtrain), y_true=ytrain)
+   models.loc['test_mse','KNN'] = mean_squared_error(y_pred = knn.predict(xtest), y_true=ytest)
    ```
 
-2. Support Vector Regression (SVR)
+2. Linear Regression
 
-   SVR adalah penerapan Support Vector Machine (SVM) untuk regresi. Algoritma ini berusaha menemukan fungsi regresi terbaik yang memiliki deviasi maksimal ε dari semua titik data, sambil tetap menjaga model sesederhana mungkin. Konsep kerjanya adalah mencari hyperplane di ruang berdimensi tinggi dengan margin tertentu, dan memanfaatkan kernel trick (seperti RBF kernel) untuk menangkap pola non-linear pada data. SVR efektif dalam menangani prediksi dengan data yang memiliki noise atau fluktuasi.
-
+   Linear Regression adalah algoritma supervised learning yang memodelkan hubungan linear antara variabel input (independen, fitur) dan variabel output (dependen, target) dengan menyesuaikan garis lurus (atau hyperplane untuk multi-dimensi) ke data yang diamati.
+   
    ```python
-   svr = SVR()
+   lr = LinearRegression()
    ```
    Kemudian akan dilakukan analisis prediksi error menggunakan Mean Squared Error (MSE) pada data latih (training data) dan data uji (testing data)
 
    ```python
-   svr.fit(X_train_seq, y_train_seq.ravel())
-   models.loc['train_mse','SVR'] = mean_squared_error(y_pred = svr.predict(X_train_seq), y_true=y_train_seq.ravel())
-   models.loc['test_mse','SVR'] = mean_squared_error(y_pred = svr.predict(X_test_seq), y_true=y_test_seq.ravel())
+   lr.fit(xtrain, ytrain)
+   models.loc['train_mse','LR'] = mean_squared_error(y_pred = lr.predict(xtrain), y_true=ytrain)
+   models.loc['test_mse','LR'] = mean_squared_error(y_pred = lr.predict(xtest), y_true=ytest)
    ```
-   `.ravel()`: Mengubah array multidimensi menjadi 1D
 
-3. Long Short-Term Memory
+3. Random Forest
 
-   Model LSTM yang dibangun merupakan pendekatan canggih untuk prediksi time series menggunakan deep learning. Alur kerjanya melibatkan sel memori dan tiga gerbang utama (input gate, forget gate, output gate) yang bersama-sama mengontrol aliran informasi masuk, tersimpan, dan keluar. Arsitektur model diawali dengan Sequential model dari TensorFlow Keras, yang memungkinkan pembangunan jaringan saraf berlapis. Struktur model terdiri dari dua layer LSTM berurutan - pertama dengan 64 unit dan kedua dengan 32 unit, keduanya menggunakan aktivasi ReLU. Layer pertama dikonfigurasi untuk mengembalikan urutan penuh, yang memungkinkan layer berikutnya menerima informasi komprehensif. Kemudian, layer Dense tunggal berfungsi sebagai output, menghasilkan prediksi numerik tunggal. Proses kompilasi menggunakan optimizer Adam dan loss function Mean Squared Error, yang merupakan pilihan umum untuk masalah regresi. Pelatihan dilakukan selama 10 epoch, dengan dataset pelatihan dan validasi yang terpisah untuk memastikan model tidak overfitting.
+   Algoritma Random Forest merupakan algoritma supervised learning yang termasuk pada golongan ensemble (group) learning. Oleh karena itu, algoritma Random Forest terdiri dari beberapa model yang akan bekerja bersama-sama secara independen, dan prediksi dari setiap model ensemble akan digabungkan untuk membuat hasil prediksi akhir.
 
    ```python
-   model_lstm = tf.keras.models.Sequential()
-   model_lstm.add(tf.keras.layers.LSTM(64, activation='relu', return_sequences=True, input_shape=(window_size, 1)))
-   model_lstm.add(tf.keras.layers.LSTM(32, activation='relu'))
-   model_lstm.add(tf.keras.layers.Dense(1))
-   model_lstm.compile(optimizer='adam', loss='mean_squared_error')
-   history = model_lstm.fit(train_dataset, epochs=10, validation_data=test_dataset)
-   y_pred = model_lstm.predict(test_dataset)
-   models.loc['train_mse', 'LSTM'] = model_lstm.evaluate(train_dataset, verbose=0)
-   models.loc['test_mse', 'LSTM'] = model_lstm.evaluate(test_dataset)
+   rf = RandomForestRegressor(
+    n_estimators=200,         # Lebih banyak pohon untuk menangkap pola kompleks
+    max_depth=15,             # Kedalaman cukup dalam tapi tidak berlebihan
+    min_samples_split=5,      # Mencegah overfitting
+    min_samples_leaf=2,       # Lebih stabil
+    max_features='sqrt',      # Standar untuk regresi
+    random_state=55,          # Konsistensi hasil
+    n_jobs=-1                 # Memanfaatkan semua core CPU
+   )
+   ```
+
+   Kemudian akan dilakukan analisis prediksi error menggunakan Mean Squared Error (MSE) pada data latih (training data) dan data uji (testing data)
+
+   ```python
+   rf.fit(xtrain, ytrain)
+   models.loc['train_mse', 'RF'] = mean_squared_error(y_pred=rf.predict(xtrain), y_true=ytrain)
+   models.loc['test_mse','RF'] = mean_squared_error(y_pred = rf.predict(xtest), y_true=ytest)
    ```
 
 ### Evaluation
-Evaluasi performa model dilakukan dengan menggunakan metrik **Mean Squared Error (MSE)**. MSE adalah ukuran kesalahan prediksi yang dihitung dengan cara mengambil rata-rata dari kuadrat selisih antara nilai aktual dengan nilai prediksi. Metrik ini banyak digunakan dalam regresi karena memberikan penalti yang lebih besar terhadap kesalahan prediksi yang signifikan (outlier). Semakin kecil nilai MSE, semakin mendekati nilai prediksi terhadap nilai aktual, sehingga model dianggap memiliki performa yang lebih baik secara kuantitatif. Proses dimulai dengan membuat DataFrame kosong bernama `results_df` yang memiliki dua index utama: `train_mse` dan `test_mse`. Ini memungkinkan perbandingan langsung performa model pada dataset pelatihan dan pengujian. Selanjutnya, sel mengisi DataFrame dengan nilai MSE untuk tiga model yang berbeda: XGBoost, SVR (Support Vector Regression), dan LSTM. Setiap kolom model akan berisi dua nilai - MSE untuk data latih dan data uji.
-```python
-results_df = pd.DataFrame(index=['train_mse', 'test_mse'])
-results_df['XGBoost'] = [models.loc['train_mse', 'XGBoost'], models.loc['test_mse', 'XGBoost']]
-results_df['SVR'] = [models.loc['train_mse', 'SVR'], models.loc['test_mse', 'SVR']]
-results_df['LSTM'] = [models.loc['train_mse', 'LSTM'], models.loc['test_mse', 'LSTM']]
-```
-Dengan menampilkan `results_df`, peneliti dapat dengan mudah membandingkan performa model berdasarkan tingkat kesalahan prediksi pada dataset pelatihan dan pengujian. Semakin rendah nilai MSE, semakin baik model dalam memprediksi data. Berikut merupakan output perbandingan performa model:
+    
+Kemudian evaluasi dari ketiga model, yaitu algoritma K-Nearest Neighbors (KNN), Linear Regression (LR), dan Random Forest (RF) untuk masing-masing data latih (training data) dan data uji (testing data) dengan melihat tingkat error-nya menggunakan Mean Squared Error (MSE)
 
-<img src="https://github.com/user-attachments/assets/15974109-72d9-4bba-b9df-217d68d907ab" alt="MSE Model" title="MSE Model">
+$MSE = \frac{1}{N} \sum_{i=1}^{N} (y_i - y\_{pred}_i)^2$
 
-Dari gambar tersebut, model yang memiliki tingkat kestabilan antara data train dan test melalui perhitungan MSE adalah model LSTM, sehingga Model LSTM akan digunakan untuk prediksi harga saham bank bca untuk 1 hari kedepan.
+di mana, nilai $N$ adalah jumlah dataset, nilai $y_i$ merupakan nilai sebenarnya, dan $y_pred$ yaitu nilai prediksinya.
+
+Penggunaan metode metrik Mean Squared Error (MSE) memiliki kelebihan, yaitu cukup sederhana dan mudah dipahami dalam melakukan perhitungan. Meskipun begitu, terdapat kelemahan pada metrik ini, yaitu hasil akurasi prediksi yang kecil karena tidak dapat membandingan hasil peramalan tersebut dengan kenyataannya. 
 
 ```python
-last_window = xtrain[-window_size:].reshape(1, -1)
-last_window_reshaped = last_window.reshape(1, window_size, 1)
-prediksi_hari_depan = model_lstm.predict(last_window_reshaped)
-prediksi_asli = scaler.inverse_transform(prediksi_hari_depan)
-print("Prediksi harga penutupan hari berikutnya:", prediksi_asli[0][0])
+    mse = pd.DataFrame(columns=['train', 'test'], index=['KNN', 'LR', 'RF'])
+    modelDict = {'KNN'     : knn, 'LR'      : lr, 'RF': rf}
+    for name, model in modelDict.items():
+        mse.loc[name, 'train'] = mean_squared_error(y_true=ytrain, y_pred=model.predict(xtrain))/1e3
+        mse.loc[name, 'test']  = mean_squared_error(y_true=ytest,  y_pred=model.predict(xtest))/1e3
 ```
-<img src="https://github.com/user-attachments/assets/fb9b7509-7d02-43c4-9e93-0dd6a500430e" alt="LSTM Prediction" title="LSTM Prediction">
 
-Dari prediksi harga saham bank bca, model memprediksi bahwa untuk 1 hari kedepan akan diperoleh penutupan sebesar Rp. 9581.318.
+<img width="284" alt="image" src="https://github.com/user-attachments/assets/82d98798-ed93-44b6-9ccc-c9e9052a8d4f" />
 
-Berdasarkan hasil evaluasi yang telah dilakukan menggunakan metrik Mean Squared Error (MSE), diperoleh temuan bahwa algoritma **Long Short-Term Memory (LSTM)** memiliki performa prediksi yang paling optimal dibandingkan dengan algoritma XGBoost dan Support Vector Regression (SVR). Hal ini ditunjukkan melalui nilai MSE yang lebih rendah dan stabil baik pada data pelatihan maupun data pengujian, mengindikasikan kemampuan LSTM dalam memodelkan pola historis data harga saham secara lebih efektif.
+Dari data tabel tersebut dapat divisualisasikan pada grafik batang berikut.
 
-Melalui implementasi dan analisis yang dilakukan dalam penelitian ini, permasalahan utama yang diajukan sejak awal, yaitu bagaimana memprediksi harga saham Bank BCA untuk satu hari ke depan berdasarkan data historis harga saham, telah terjawab dengan baik. Tujuan penelitian untuk membandingkan performa beberapa algoritma machine learning dan deep learning dalam prediksi harga saham juga berhasil dicapai.
+<img alt="image" src="https://github.com/user-attachments/assets/5fb8580e-4dfd-4c3a-b20f-c9c760ed3f91" />
 
-Temuan ini diharapkan dapat memberikan kontribusi sebagai referensi awal dalam pengembangan sistem prediksi harga saham berbasis machine learning, khususnya pada konteks pasar modal Indonesia. Untuk penelitian selanjutnya, disarankan dilakukan pengayaan variabel dengan memasukkan indikator teknikal atau faktor makroekonomi, serta eksplorasi arsitektur deep learning lainnya guna meningkatkan akurasi dan robustitas model prediksi.
+Dari visualisasi diagram di atas dapat disimpulkan bahwa,
 
+1. Model dengan algoritma Linear Regression memberikan nilai error yang paling kecil pada data test, yaitu sebesar 0.90.
+2. Model dengan algoritma K-Nearest Neighbor memiliki tingkat error yang sedang di antara dua algoritma lainnya.
+3. Model dengan algoritma Random Forest mengalami error yang paling besar pada data testing namun nilai error paling kecil pada data train dengan nilai training error sebesar 0.55, dan nilai testing error sebesar 1.15.
+
+Selanjutnya adalah Melakukan pengujian prediksi dengan menggunakan beberapa nilai harga bitcoin dari data uji (testing)
+
+<img width="738" alt="image" src="https://github.com/user-attachments/assets/0feff357-5f40-48ba-b6a3-2659e40337f4" />
+
+Dapat dilihat prediksi pada model dengan algoritma Linier Regression memberikan hasil yang paling mendekati dengan nilai `y_true` jika dibandingkan dengan algoritma model yang lainnya.
+
+Nilai `y_true` sebesar 38501.94 dan nilai prediksi `Linier Regression` sebesar 38559.8.
+
+Kesimpulannya adalah model yang digunakan untuk melakukan prediksi harga bitcoin menghasilkan tingkat error yang paling rendah dengan menggunakan algoritma Linier Regression pada model yang telah dibangun.
 
 ## Referensi
 [1] Zhang, W., Wang, P., & Li, X. (2020). Predicting the price of Bitcoin using deep learning. Annals of Operations Research, 1-28. DOI: 10.1007/s10479-020-03669-5
