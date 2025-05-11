@@ -1,4 +1,4 @@
-<img width="232" alt="image" src="https://github.com/user-attachments/assets/432e3cc3-2a52-4526-9e08-5c23749555cf" /># Laporan Proyek Machine Learning - Ica Nur Halimah
+# Laporan Proyek Machine Learning - Ica Nur Halimah
 ## Domain Proyek
 Domain proyek ini akan membahas mengenai permasalahan dalam bidang ekonomi yang dibuat untuk mengetahui prediksi harga Bitcoin USD.
 
